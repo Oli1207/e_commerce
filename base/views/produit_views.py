@@ -7,8 +7,11 @@ from base.models import *
 from base.serializers import *
 from rest_framework import status
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import TemplateView
+from django.views.decorators.cache import never_cache
 
 
+index = never_cache(TemplateView.as_view(template_name='index.html'))
 @api_view(['GET'])
 def getProduits(request):
     query = request.query_params.get('keyword')
@@ -41,6 +44,8 @@ def getProduit(request, pk):
     serializer = ProductSerializer(product, many=False)
 
     return Response(serializer.data)
+
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
